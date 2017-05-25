@@ -10,9 +10,16 @@ import UIKit
 
 class ViewController: UIViewController {
 
+    @IBOutlet weak var image: UIImageView!
+    
     override func viewDidLoad() {
         super.viewDidLoad()
         // Do any additional setup after loading the view, typically from a nib.
+        
+        image.image = UIImage(named: "tuican.jpg")
+        
+        var rgbaImage = RGBAImage(image: image.image!)
+        rgbaImage?.calculateKMeans()
     }
 
     override func didReceiveMemoryWarning() {

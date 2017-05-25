@@ -67,25 +67,27 @@ public struct RGBAImage {
         let gd: Float = Float(p1.G) - Float(p2.G)
         let bd: Float = Float(p1.B) - Float(p2.B)
         
-        let s: Float = rd + gd + bd
+        let s: Float = rd * rd + gd * gd  + bd * bd
         
         return sqrtf(s)
     }
     
     fileprivate func calculateCentre(points: [Pixel]) -> Pixel {
-        let ra: Float = 0.0
-        let ba: Float = 0.0
-        let ga: Float = 0.0
+        var sumr: Float = 0.0
+        var sumg: Float = 0.0
+        var sumb: Float = 0.0
         
-        let sumra: Float = points.reduce(ra) { $0 + Float($1.R) }
-        let sumga: Float = points.reduce(ga) { $0 + Float($1.G) }
-        let sumba: Float = points.reduce(ba) { $0 + Float($1.B) }
+        for pixel in points {
+            sumr += Float(pixel.R)
+            sumg += Float(pixel.G)
+            sumb += Float(pixel.B)
+        }
         
         var pixel: Pixel = Pixel(value: 0)
         
-        pixel.R = UInt8(sumra / Float(points.count))
-        pixel.G = UInt8(sumga / Float(points.count))
-        pixel.B = UInt8(sumba / Float(points.count))
+        pixel.R = UInt8(sumr / Float(points.count))
+        pixel.G = UInt8(sumg / Float(points.count))
+        pixel.B = UInt8(sumb / Float(points.count))
         
         return pixel
     }
@@ -99,10 +101,10 @@ public struct RGBAImage {
             clusters.append(points[Int(idx)])
         }
     
-        var plists: [[Int]]
+        var plists: [[Int]] = [[Int]]()
         
         for _ in 0..<K {
-            plists.append([])
+            plists.append([Int]())
         }
         
         while true {
