@@ -22,7 +22,8 @@ public struct RGBAImage {
         height = Int(image.size.height)
         
         let bytesPerRow = width * 4
-        let imageData = UnsafeMutablePointer<Pixel>.allocate(capacity: width * height)
+        //let imageData = UnsafeMutablePointer<Pixel>.allocate(capacity: width * height)
+        let imageData = UnsafeMutablePointer<UInt32>.allocate(capacity: width * height)
         
         defer {
             imageData.deallocate(capacity: width * height)
@@ -46,11 +47,19 @@ public struct RGBAImage {
         
         imageContext.draw(cgImage, in: CGRect(origin: .zero, size: image.size))
         
-        pixels = Array(UnsafeMutableBufferPointer<Pixel>(start: imageData, count: width * height))
+        //pixels = Array(UnsafeMutableBufferPointer<Pixel>(start: imageData, count: width * height))
+        let buffer = UnsafeMutableBufferPointer(start: imageData, count: width * height)
+        
+        var c = 0
+        
+        pixels = buffer.map {
+            c += 1
+            return Pixel(pixel: $0)
+        }
     }
     
     func calculateKMeans() {
-        kMeans(points: pixels, K: 4, minDiff: 0.001)
+        kMeans(points: pixels, K: 4, minDiff: 0.01)
     }
     
     public func pixel(x: Int, y: Int) -> Pixel? {
@@ -63,9 +72,9 @@ public struct RGBAImage {
     }
     
     fileprivate func euclidean(p1: Pixel, p2: Pixel) -> Float {
-        let rd: Float = Float(p1.R) - Float(p2.R)
-        let gd: Float = Float(p1.G) - Float(p2.G)
-        let bd: Float = Float(p1.B) - Float(p2.B)
+        let rd = p1.R - p2.R
+        let gd = p1.G - p2.G
+        let bd = p1.B - p2.B
         
         let s: Float = rd * rd + gd * gd  + bd * bd
         
@@ -78,16 +87,16 @@ public struct RGBAImage {
         var sumb: Float = 0.0
         
         for pixel in points {
-            sumr += Float(pixel.R)
-            sumg += Float(pixel.G)
-            sumb += Float(pixel.B)
+            sumr += pixel.R
+            sumg += pixel.G
+            sumb += pixel.B
         }
         
-        var pixel: Pixel = Pixel(value: 0)
+        var pixel: Pixel = Pixel()
         
-        pixel.R = UInt8(sumr / Float(points.count))
-        pixel.G = UInt8(sumg / Float(points.count))
-        pixel.B = UInt8(sumb / Float(points.count))
+        pixel.R = sumr / Float(points.count)
+        pixel.G = sumg / Float(points.count)
+        pixel.B = sumb / Float(points.count)
         
         return pixel
     }
@@ -140,6 +149,8 @@ public struct RGBAImage {
                 clusters[i] = newCluster
                 
                 diff = diff > dist ? diff : dist
+                
+                print("Diff \(diff)/n")
             }
             
             if (diff < minDiff) {
