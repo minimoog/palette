@@ -48,18 +48,15 @@ public struct RGBAImage {
         imageContext.draw(cgImage, in: CGRect(origin: .zero, size: image.size))
         
         //pixels = Array(UnsafeMutableBufferPointer<Pixel>(start: imageData, count: width * height))
+        
         let buffer = UnsafeMutableBufferPointer(start: imageData, count: width * height)
-        
-        var c = 0
-        
         pixels = buffer.map {
-            c += 1
             return Pixel(pixel: $0)
         }
     }
     
-    func calculateKMeans() {
-        kMeans(points: pixels, K: 4, minDiff: 0.01)
+    func calculateKMeans() -> [Pixel] {
+        return kMeans(points: pixels, K: 4, minDiff: 0.25)
     }
     
     public func pixel(x: Int, y: Int) -> Pixel? {
@@ -101,7 +98,7 @@ public struct RGBAImage {
         return pixel
     }
     
-    fileprivate func kMeans(points: [Pixel], K: Int, minDiff: Float) {
+    fileprivate func kMeans(points: [Pixel], K: Int, minDiff: Float) -> [Pixel] {
         
         var clusters: [Pixel] = [Pixel]()
         
@@ -149,13 +146,15 @@ public struct RGBAImage {
                 clusters[i] = newCluster
                 
                 diff = diff > dist ? diff : dist
-                
-                print("Diff \(diff)/n")
             }
             
-            if (diff < minDiff) {
-                break;
+            print("Diff \(diff)/n")
+            
+            if diff < minDiff {
+                break
             }
         }
+        
+        return clusters
     }
 }
