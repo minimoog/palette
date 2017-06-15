@@ -56,7 +56,7 @@ public struct RGBAImage {
     }
     
     func calculateKMeans() -> [Pixel] {
-        return kMeans(points: pixels, K: 4, minDiff: 0.25)
+        return kMeans(points: pixels, K: 4, minDiff: 2.0)
     }
     
     public func pixel(x: Int, y: Int) -> Pixel? {

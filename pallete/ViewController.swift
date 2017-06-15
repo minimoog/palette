@@ -8,7 +8,7 @@
 
 import UIKit
 
-class ViewController: UIViewController {
+class ViewController: UIViewController, UIImagePickerControllerDelegate, UINavigationControllerDelegate {
 
     @IBOutlet weak var image: UIImageView!
     
@@ -23,9 +23,17 @@ class ViewController: UIViewController {
         
         image.image = UIImage(named: "tuican.jpg")
         
-        var rgbaImage = RGBAImage(image: image.image!)
+        calcKMeans(image.image!)
+    }
+    
+    private func calcKMeans(_ image: UIImage) {
+        let rgbaImage = RGBAImage(image: image)
         let clusters: [Pixel] = rgbaImage!.calculateKMeans()
-       
+        
+        showClusterColors(clusters)
+    }
+    
+    private func showClusterColors(_ clusters: [Pixel]) {
         for cluster in clusters {
             print(cluster)
         }
@@ -49,13 +57,34 @@ class ViewController: UIViewController {
                                          green: CGFloat(clusters[3].G / 255.0),
                                          blue: CGFloat(clusters[3].B / 255.0),
                                          alpha: 1.0)
+
     }
 
     override func didReceiveMemoryWarning() {
         super.didReceiveMemoryWarning()
         // Dispose of any resources that can be recreated.
     }
-
-
+    
+    @IBAction func onImageViewTouch(_ sender: UITapGestureRecognizer) {
+        let picker = UIImagePickerController()
+        picker.delegate = self
+        picker.sourceType = .photoLibrary
+        picker.mediaTypes = UIImagePickerController.availableMediaTypes(for: .photoLibrary)!
+        
+        present(picker, animated: true)
+    }
+    
+    func imagePickerController(_ picker: UIImagePickerController, didFinishPickingMediaWithInfo info: [String : Any]) {
+        guard let pickedImage = info[UIImagePickerControllerOriginalImage] as? UIImage else { return }
+        
+        dismiss(animated: true)
+        
+        image.image = pickedImage
+        calcKMeans(pickedImage)
+    }
+    
+    func imagePickerControllerDidCancel(_ picker: UIImagePickerController) {
+        
+    }
 }
 
