@@ -56,7 +56,7 @@ public struct RGBAImage {
     }
     
     func calculateKMeans() -> [Pixel] {
-        return kMeans(points: pixels, K: 4, minDiff: 2.0)
+        return kMeans(points: pixels, K: 4, minDiff: 5.0)
     }
     
     public func pixel(x: Int, y: Int) -> Pixel? {
@@ -75,7 +75,8 @@ public struct RGBAImage {
         
         let s: Float = rd * rd + gd * gd  + bd * bd
         
-        return sqrtf(s)
+        //return sqrtf(s)
+        return s
     }
     
     fileprivate func calculateCentre(points: [Pixel]) -> Pixel {
@@ -107,9 +108,11 @@ public struct RGBAImage {
             clusters.append(points[Int(idx)])
         }
     
-        var plists: [Int: [Int]] = [0: [], 1: [], 2: [], 3: []]
         
         while true {
+            
+            var plists: [Int: [Int]] = [0: [], 1: [], 2: [], 3: []]
+            
             for (i, pixel) in points.enumerated() {
                 var smallestDistance: Float = 10000000.0
                 var index = 0
