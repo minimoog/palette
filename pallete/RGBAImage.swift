@@ -110,10 +110,9 @@ public struct RGBAImage {
     
         
         while true {
+            var averages = [RunningAveragePixel](repeating: RunningAveragePixel(), count: K)
             
-            var plists: [Int: [Int]] = [0: [], 1: [], 2: [], 3: []]
-            
-            for (i, pixel) in points.enumerated() {
+            for pixel in points {
                 var smallestDistance: Float = 10000000.0
                 var index = 0
                 
@@ -126,7 +125,7 @@ public struct RGBAImage {
                     }
                 }
                 
-                plists[index]?.append(i)
+                averages[index].push(pixel: pixel)
             }
             
             var diff: Float = 0
@@ -134,7 +133,7 @@ public struct RGBAImage {
             for i in 0..<K {
                 let old = clusters[i]
                 
-                let centre = calculateCentre(points: (plists[i]?.map { return pixels[$0] })!)
+                let centre = averages[i].average
                 let newCluster = centre
                 
                 let dist = euclidean(p1: old, p2: centre)

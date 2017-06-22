@@ -9,6 +9,7 @@
 /* Begin PBXBuildFile section */
 		520954831ECBAEE600562C75 /* RGBAImage.swift in Sources */ = {isa = PBXBuildFile; fileRef = 520954821ECBAEE600562C75 /* RGBAImage.swift */; };
 		520954851ED3A92D00562C75 /* tuican.jpg in Resources */ = {isa = PBXBuildFile; fileRef = 520954841ED3A92D00562C75 /* tuican.jpg */; };
+		5247C9A21EFB271E00308F98 /* RunningAverage.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5247C9A11EFB271E00308F98 /* RunningAverage.swift */; };
 		52C650341ECA60FB003CD429 /* AppDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = 52C650331ECA60FB003CD429 /* AppDelegate.swift */; };
 		52C650361ECA60FB003CD429 /* ViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 52C650351ECA60FB003CD429 /* ViewController.swift */; };
 		52C650391ECA60FB003CD429 /* Main.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 52C650371ECA60FB003CD429 /* Main.storyboard */; };
@@ -20,6 +21,7 @@
 /* Begin PBXFileReference section */
 		520954821ECBAEE600562C75 /* RGBAImage.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = RGBAImage.swift; sourceTree = "<group>"; };
 		520954841ED3A92D00562C75 /* tuican.jpg */ = {isa = PBXFileReference; lastKnownFileType = image.jpeg; path = tuican.jpg; sourceTree = "<group>"; };
+		5247C9A11EFB271E00308F98 /* RunningAverage.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = RunningAverage.swift; sourceTree = "<group>"; };
 		52C650301ECA60FB003CD429 /* pallete.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = pallete.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		52C650331ECA60FB003CD429 /* AppDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AppDelegate.swift; sourceTree = "<group>"; };
 		52C650351ECA60FB003CD429 /* ViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ViewController.swift; sourceTree = "<group>"; };
@@ -69,6 +71,7 @@
 				52C650451ECA65F6003CD429 /* Pixel.swift */,
 				520954821ECBAEE600562C75 /* RGBAImage.swift */,
 				520954841ED3A92D00562C75 /* tuican.jpg */,
+				5247C9A11EFB271E00308F98 /* RunningAverage.swift */,
 			);
 			path = pallete;
 			sourceTree = "<group>";
@@ -151,6 +154,7 @@
 				520954831ECBAEE600562C75 /* RGBAImage.swift in Sources */,
 				52C650461ECA65F6003CD429 /* Pixel.swift in Sources */,
 				52C650341ECA60FB003CD429 /* AppDelegate.swift in Sources */,
+				5247C9A21EFB271E00308F98 /* RunningAverage.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
