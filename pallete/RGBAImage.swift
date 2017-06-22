@@ -112,9 +112,12 @@ public struct RGBAImage {
         while true {
             var averages = [RunningAveragePixel](repeating: RunningAveragePixel(), count: K)
             
-            for pixel in points {
+            for _ in (0..<points.count / 100) {
                 var smallestDistance: Float = 10000000.0
                 var index = 0
+                
+                let randomIndex = arc4random_uniform(UInt32(points.count))                
+                let pixel = points[Int(randomIndex)]
                 
                 for j in 0..<K {
                     let distance = euclidean(p1: pixel, p2: clusters[j])
