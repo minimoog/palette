@@ -21,21 +21,31 @@ struct RunningAverage {
 }
 
 struct RunningAveragePixel {
-    var average: Pixel = Pixel()
+    var averageR: Float = 0.0
+    var averageG: Float = 0.0
+    var averageB: Float = 0.0
     var denominator: Int = 1
     
-//    init() {
-//    }
-    
     mutating func push(pixel: Pixel) {
-        let diffR = pixel.R - average.R
-        let diffG = pixel.G - average.G
-        let diffB = pixel.B - average.B
+        let diffR = Float(pixel.R) - averageR
+        let diffG = Float(pixel.G) - averageG
+        let diffB = Float(pixel.B) - averageB
         
-        average.R = average.R + diffR / Float(denominator)
-        average.G = average.G + diffG / Float(denominator)
-        average.B = average.B + diffB / Float(denominator)
+        averageR = averageR + diffR / Float(denominator)
+        averageG = averageG + diffG / Float(denominator)
+        averageB = averageB + diffB / Float(denominator)
         
         denominator += 1
+    }
+    
+    var average: Pixel {
+        get {
+            var pixel = Pixel()
+            pixel.R = UInt8(averageR)
+            pixel.G = UInt8(averageG)
+            pixel.B = UInt8(averageB)
+            
+            return pixel
+        }
     }
 }

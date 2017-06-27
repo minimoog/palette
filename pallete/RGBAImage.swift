@@ -9,7 +9,7 @@
 import UIKit
 
 public struct RGBAImage {
-    public var pixels: [Pixel] = []
+    public var pixels: UnsafeMutableBufferPointer<Pixel>
     public var width: Int
     public var height: Int
     
@@ -22,12 +22,7 @@ public struct RGBAImage {
         height = Int(image.size.height)
         
         let bytesPerRow = width * 4
-        //let imageData = UnsafeMutablePointer<Pixel>.allocate(capacity: width * height)
-        let imageData = UnsafeMutablePointer<UInt32>.allocate(capacity: width * height)
-        
-        defer {
-            imageData.deallocate(capacity: width * height)
-        }
+        let imageData = UnsafeMutablePointer<Pixel>.allocate(capacity: width * height)
         
         let colorSpace = CGColorSpaceCreateDeviceRGB()
         
@@ -47,11 +42,10 @@ public struct RGBAImage {
         
         imageContext.draw(cgImage, in: CGRect(origin: .zero, size: image.size))
         
-        //pixels = Array(UnsafeMutableBufferPointer<Pixel>(start: imageData, count: width * height))
+        pixels = UnsafeMutableBufferPointer(start: imageData, count: width * height)
         
-        let buffer = UnsafeMutableBufferPointer(start: imageData, count: width * height)
-        pixels = buffer.map {
-            return Pixel(pixel: $0)
+        defer {
+            imageData.deallocate(capacity: width * height)
         }
     }
     
@@ -69,9 +63,9 @@ public struct RGBAImage {
     }
     
     fileprivate func euclidean(p1: Pixel, p2: Pixel) -> Float {
-        let rd = p1.R - p2.R
-        let gd = p1.G - p2.G
-        let bd = p1.B - p2.B
+        let rd = Float(p1.R) - Float(p2.R)
+        let gd = Float(p1.G) - Float(p2.G)
+        let bd = Float(p1.B) - Float(p2.B)
         
         let s: Float = rd * rd + gd * gd  + bd * bd
         
@@ -85,21 +79,21 @@ public struct RGBAImage {
         var sumb: Float = 0.0
         
         for pixel in points {
-            sumr += pixel.R
-            sumg += pixel.G
-            sumb += pixel.B
+            sumr += Float(pixel.R) // ### opt
+            sumg += Float(pixel.G)
+            sumb += Float(pixel.B)
         }
         
         var pixel: Pixel = Pixel()
         
-        pixel.R = sumr / Float(points.count)
-        pixel.G = sumg / Float(points.count)
-        pixel.B = sumb / Float(points.count)
+        pixel.R = UInt8(sumr / Float(points.count))
+        pixel.G = UInt8(sumg / Float(points.count))
+        pixel.B = UInt8(sumb / Float(points.count))
         
         return pixel
     }
     
-    fileprivate func kMeans(points: [Pixel], K: Int, minDiff: Float) -> [Pixel] {
+    fileprivate func kMeans(points: UnsafeMutableBufferPointer<Pixel>, K: Int, minDiff: Float) -> [Pixel] {
         
         var clusters: [Pixel] = [Pixel]()
         
