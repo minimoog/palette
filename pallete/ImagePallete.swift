@@ -8,8 +8,9 @@
 
 import UIKit
 
-public struct ImagePallete {
+public class ImagePallete {
     public var pixels: UnsafeMutableBufferPointer<Pixel>
+    public var imageData: UnsafeMutablePointer<Pixel>
     public var width: Int
     public var height: Int
     
@@ -22,7 +23,7 @@ public struct ImagePallete {
         height = Int(image.size.height)
         
         let bytesPerRow = width * 4
-        let imageData = UnsafeMutablePointer<Pixel>.allocate(capacity: width * height)
+        imageData = UnsafeMutablePointer<Pixel>.allocate(capacity: width * height)
         
         let colorSpace = CGColorSpaceCreateDeviceRGB()
         
@@ -43,10 +44,10 @@ public struct ImagePallete {
         imageContext.draw(cgImage, in: CGRect(origin: .zero, size: image.size))
         
         pixels = UnsafeMutableBufferPointer(start: imageData, count: width * height)
-        
-        defer {
-            imageData.deallocate(capacity: width * height)
-        }
+    }
+    
+    deinit {
+        self.imageData.deallocate(capacity: width * height)
     }
     
     func calculateKMeans() -> [Pixel] {
