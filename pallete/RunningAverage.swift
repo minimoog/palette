@@ -21,10 +21,10 @@ struct RunningAverage {
 }
 
 struct RunningAveragePixel {
-    var averageR: Float = 0.0
-    var averageG: Float = 0.0
-    var averageB: Float = 0.0
-    var denominator: Int = 1
+    public var averageR: Float = 0.0
+    public var averageG: Float = 0.0
+    public var averageB: Float = 0.0
+    public var denominator: Int = 1
     
     mutating func push(pixel: Pixel) {
         let diffR = Float(pixel.R) - averageR

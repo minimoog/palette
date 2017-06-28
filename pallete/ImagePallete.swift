@@ -142,6 +142,21 @@ public struct ImagePallete {
             print("Diff \(diff)/n")
             
             if diff < minDiff {
+                //sort by count
+                
+                let counts = averages.map{ $0.denominator }
+                let countsWithClusters = zip(counts, clusters).sorted(by: {
+                    let (c0, _) = $0
+                    let (c1, _) = $1
+                    
+                    return c0 > c1
+                })
+                
+                clusters = countsWithClusters.map {
+                    let (_, cluster) = $0
+                    return cluster
+                }
+                
                 break
             }
         }
