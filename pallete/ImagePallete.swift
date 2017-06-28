@@ -8,7 +8,7 @@
 
 import UIKit
 
-public struct RGBAImage {
+public struct ImagePallete {
     public var pixels: UnsafeMutableBufferPointer<Pixel>
     public var width: Int
     public var height: Int
@@ -102,7 +102,6 @@ public struct RGBAImage {
             clusters.append(points[Int(idx)])
         }
     
-        
         while true {
             var averages = [RunningAveragePixel](repeating: RunningAveragePixel(), count: K)
             

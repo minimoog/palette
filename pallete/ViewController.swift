@@ -27,7 +27,7 @@ class ViewController: UIViewController, UIImagePickerControllerDelegate, UINavig
     }
     
     private func calcKMeans(_ image: UIImage) {
-        let rgbaImage = RGBAImage(image: image)
+        let rgbaImage = ImagePallete(image: image)
         let clusters: [Pixel] = rgbaImage!.calculateKMeans()
         
         showClusterColors(clusters)
