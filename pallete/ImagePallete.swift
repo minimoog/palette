@@ -11,8 +11,8 @@ import UIKit
 public class ImagePallete {
     fileprivate var pixels: UnsafeMutableBufferPointer<Pixel>
     fileprivate var imageData: UnsafeMutablePointer<Pixel>
-    fileprivate var width: Int
-    fileprivate var height: Int
+    fileprivate let width: Int
+    fileprivate let height: Int
     
     public init?(image: UIImage) {
         guard let cgImage = image.cgImage else {
@@ -54,15 +54,6 @@ public class ImagePallete {
         return kMeans(points: pixels, K: numClusters, minDiff: 5.0)
     }
     
-    fileprivate func pixel(x: Int, y: Int) -> Pixel? {
-        guard x >= 0 && x < width && y >= 0 && y < height else {
-            return nil
-        }
-        
-        let address = y * width + x
-        return pixels[address]
-    }
-    
     fileprivate func euclidean(p1: Pixel, p2: Pixel) -> Float {
         let rd = Float(p1.R) - Float(p2.R)
         let gd = Float(p1.G) - Float(p2.G)
@@ -80,7 +71,7 @@ public class ImagePallete {
         var sumb: Float = 0.0
         
         for pixel in points {
-            sumr += Float(pixel.R) // ### opt
+            sumr += Float(pixel.R)
             sumg += Float(pixel.G)
             sumb += Float(pixel.B)
         }
