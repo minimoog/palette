@@ -9,10 +9,10 @@
 import UIKit
 
 public class ImagePallete {
-    public var pixels: UnsafeMutableBufferPointer<Pixel>
-    public var imageData: UnsafeMutablePointer<Pixel>
-    public var width: Int
-    public var height: Int
+    fileprivate var pixels: UnsafeMutableBufferPointer<Pixel>
+    fileprivate var imageData: UnsafeMutablePointer<Pixel>
+    fileprivate var width: Int
+    fileprivate var height: Int
     
     public init?(image: UIImage) {
         guard let cgImage = image.cgImage else {
@@ -50,11 +50,11 @@ public class ImagePallete {
         self.imageData.deallocate(capacity: width * height)
     }
     
-    func calculateKMeans() -> [Pixel] {
-        return kMeans(points: pixels, K: 4, minDiff: 5.0)
+    func calculateKMeans(numClusters: Int = 4) -> [Pixel] {
+        return kMeans(points: pixels, K: numClusters, minDiff: 5.0)
     }
     
-    public func pixel(x: Int, y: Int) -> Pixel? {
+    fileprivate func pixel(x: Int, y: Int) -> Pixel? {
         guard x >= 0 && x < width && y >= 0 && y < height else {
             return nil
         }
